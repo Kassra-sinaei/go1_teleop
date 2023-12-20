@@ -8,9 +8,10 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(ros2_unitree_legged_msgs REQUIRED)
+find_package(teleop)
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -24,4 +25,26 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+include_directories(
+    include
+    include/${PROJECT_NAME}
+)
+
+# Service and Message files
+# rosidl_generate_interfaces(${PROJECT_NAME}
+#   "srv/PosCmd.srv"
+#  )
+
+set(SOURCES
+  src/position_command.cpp
+)
+# Executables
+add_executable(position_server src/position_server.cpp ${SOURCES})
+target_link_libraries(position_server ${EXTRA_LIBS})
+ament_target_dependencies(position_server rclcpp ros2_unitree_legged_msgs)
+
+install(TARGETS
+    position_server
+    DESTINATION lib/${PROJECT_NAME}
+)
 ament_package()
