@@ -5,6 +5,7 @@
 #include <vector>
 #include "math.h"
 #include "cmath"
+#include "string.h"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -18,7 +19,7 @@ using namespace std;
 
 class PositionCommand : public rclcpp::Node{
     public:
-        PositionCommand();
+        PositionCommand(std::string passedNodeName="VOID");
         ~PositionCommand();
     private:
         double* current_pos_;
@@ -28,5 +29,5 @@ class PositionCommand : public rclcpp::Node{
         rclcpp::Publisher<ros2_unitree_legged_msgs::msg::HighCmd>::SharedPtr pos_msg_;
 
         void send2UDP(const std::shared_ptr<ros2_unitree_legged_msgs::srv::PosCmd::Request> req,
-          std::shared_ptr<ros2_unitree_legged_msgs::srv::PosCmd::Response>      res);
+          std::shared_ptr<ros2_unitree_legged_msgs::srv::PosCmd::Response> res);
 };

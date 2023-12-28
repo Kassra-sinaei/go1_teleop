@@ -31,9 +31,9 @@ include_directories(
 )
 
 # Service and Message files
-# rosidl_generate_interfaces(${PROJECT_NAME}
-#   "srv/PosCmd.srv"
-#  )
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "srv/PosCmd.srv"
+ )
 
 set(SOURCES
   src/position_command.cpp

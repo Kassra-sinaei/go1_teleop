@@ -1,9 +1,10 @@
 #include "position_command.h"
 
-PositionCommand::PositionCommand():Node("position_cmd_srv"){
+PositionCommand::PositionCommand(std::string passedNodeName):Node(passedNodeName){
 
-    // srv_ = this->create_service<ros2_unitree_legged_msgs::srv::PosCmd>("pos_cmd", &PositionCommand::send2UDP);
-    // pos_msg_ = this->create_publisher<ros2_unitree_legged_msgs::msg::HighCmd>("hig_cmd", 1);
+    srv_ = this->create_service<ros2_unitree_legged_msgs::srv::PosCmd>("/pos_cmd", 
+            std::bind(&PositionCommand::send2UDP, this, std::placeholders::_1, std::placeholders::_2 ));
+    pos_msg_ = this->create_publisher<ros2_unitree_legged_msgs::msg::HighCmd>("/high_cmd", 1);
 
     current_pos_ = new double[3]; 
     low_bound_ = new double[3]; 
