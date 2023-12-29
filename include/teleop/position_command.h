@@ -1,8 +1,7 @@
 #pragma once
 
-#include "iostream"
 #include "fstream"
-#include <vector>
+#include "eigen3/Eigen/Eigen"
 #include "math.h"
 #include "cmath"
 #include "string.h"
@@ -22,9 +21,9 @@ class PositionCommand : public rclcpp::Node{
         PositionCommand(std::string passedNodeName="VOID");
         ~PositionCommand();
     private:
-        double* current_pos_;
-        double* low_bound_;
-        double* high_bound_;
+        Eigen::Vector3d current_pos_;
+        Eigen::Vector3d low_bound_;
+        Eigen::Vector3d high_bound_;
         rclcpp::Service<ros2_unitree_legged_msgs::srv::PosCmd>::SharedPtr srv_;
         rclcpp::Publisher<ros2_unitree_legged_msgs::msg::HighCmd>::SharedPtr pos_msg_;
 

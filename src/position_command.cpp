@@ -6,17 +6,16 @@ PositionCommand::PositionCommand(std::string passedNodeName):Node(passedNodeName
             std::bind(&PositionCommand::send2UDP, this, std::placeholders::_1, std::placeholders::_2 ));
     pos_msg_ = this->create_publisher<ros2_unitree_legged_msgs::msg::HighCmd>("/high_cmd", 1);
 
-    current_pos_ = new double[3]; 
-    low_bound_ = new double[3]; 
-    high_bound_ = new double[3]; 
+    current_pos_ << 0, 0, 0; 
+    low_bound_ << 0, 0, 0; 
+    high_bound_ << 0, 0, 0; 
     current_pos_[0] = 0; current_pos_[1] = 0; current_pos_[2] = 0; 
     // TODO: set lower bounds from input arguments
     RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Position Command Server Running");
 }
 
 PositionCommand::~PositionCommand(){
-    delete[] low_bound_;
-    delete[] high_bound_;
+    
     std::cout << "Position Command Server Stopped \n";
 }
 
@@ -40,6 +39,9 @@ void PositionCommand::send2UDP(const std::shared_ptr<ros2_unitree_legged_msgs::s
     high_cmd_ros.reserve = 0;
 
     pos_msg_->publish(high_cmd_ros);
+    Eigen::Vector3d temp(req->x, req->y, req->phi);
+    this->current_pos_ = this->current_pos_ + temp;
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Position Command sent...");
 
     res->res = true;
 
