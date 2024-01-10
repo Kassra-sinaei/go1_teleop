@@ -5,6 +5,13 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# Find processor Architecture
+if("${CMAKE_SYSTEM_PROCESSOR}" MATCHES "x86_64.*")
+  set(ARCH amd64)
+else()
+  set(ARCH arm64)
+endif()
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -25,10 +32,15 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+set(EXTRA_LIBS -pthread libunitree_legged_sdk_${ARCH}.so lcm)
+
 include_directories(
     include
     include/${PROJECT_NAME}
+    ${CMAKE_SOURCE_DIR}/unitree_legged_sdk/include
 )
+
+link_directories(${CMAKE_SOURCE_DIR}/unitree_legged_sdk/lib)
 
 # Service and Message files
 rosidl_generate_interfaces(${PROJECT_NAME}
@@ -47,4 +59,10 @@ install(TARGETS
     position_server
     DESTINATION lib/${PROJECT_NAME}
 )
+
+install(
+    DIRECTORY ${CMAKE_SOURCE_DIR}/unitree_legged_sdk/lib/
+    DESTINATION lib
+)
+
 ament_package()
