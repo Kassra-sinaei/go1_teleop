@@ -27,6 +27,7 @@ class PositionCommand : public rclcpp::Node{
         template<typename T> void clamp(T low, T high, T &input);
     private:
         Eigen::Vector3d current_pos_;
+        Eigen::Vector3d ol_estimate_;
         Eigen::Vector3d current_vel_;
         Eigen::Vector3d low_bound_;
         Eigen::Vector3d high_bound_;

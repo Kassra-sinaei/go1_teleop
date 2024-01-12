@@ -22,6 +22,7 @@ PositionCommand::PositionCommand(std::string passedNodeName, const rclcpp::Execu
     executor_->add_node(this->get_node_base_interface());
 
     current_pos_ << 0, 0, 0; 
+    ol_estimate_ << 0, 0, 0; 
     current_vel_ << 0, 0, 0;
     low_bound_ << -1, -2, 0; 
     high_bound_ << 2, 2, 1; 
@@ -75,7 +76,8 @@ void PositionCommand::send2UDP(const std::shared_ptr<ros2_unitree_legged_msgs::s
     while(time < 2 * 50)    // modify this duration
     {
         time+=1;
-        this->pidController(vel, set, this->current_pos_);
+        // this->pidController(vel, set, this->current_pos_);
+        this->pidController(vel, set, ol_estimate_);
         log_file_ << vel(0) << "," << vel(1) << "," << vel(2) << ",";
         log_file_ << current_pos_(0) << "," << current_pos_(1) << "," << current_pos_(2) << "\n"; 
         this->clamp(low_bound_, high_bound_, vel);
@@ -84,6 +86,7 @@ void PositionCommand::send2UDP(const std::shared_ptr<ros2_unitree_legged_msgs::s
         pos_msg_->publish(high_cmd_ros);
         //RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "I'm fine");
         loop_rate_->sleep();
+        ol_estimate_ = ol_estimate_ + vel / 50;
         //executor_->spin_some(max_iter);
     }
     // high_cmd_ros.velocity[0] = 0;
@@ -92,7 +95,8 @@ void PositionCommand::send2UDP(const std::shared_ptr<ros2_unitree_legged_msgs::s
     // pos_msg_->publish(high_cmd_ros);
 
     RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Position Command sent...");
-    double error_norm = (set - current_pos_).norm();
+    //double error_norm = (set - current_pos_).norm();
+    double error_norm = (set - ol_estimate_).norm();
     if(error_norm < 0.05){
         res->res = true;
     }else{
