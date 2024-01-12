@@ -21,8 +21,10 @@ using namespace std;
 
 class PositionCommand : public rclcpp::Node{
     public:
-        PositionCommand(std::string passedNodeName);
+        PositionCommand(std::string passedNodeName, const rclcpp::Executor::SharedPtr& executor);
         ~PositionCommand();
+        void run();
+        template<typename T> void clamp(T low, T high, T &input);
     private:
         Eigen::Vector3d current_pos_;
         Eigen::Vector3d current_vel_;
@@ -35,7 +37,11 @@ class PositionCommand : public rclcpp::Node{
         rclcpp::Subscription<ros2_unitree_legged_msgs::msg::HighState>::SharedPtr pos_estimate_;
         
         rclcpp::WallRate::SharedPtr loop_rate_;
-        //rclcpp::executors::SingleThreadedExecutor* executor_;
+        rclcpp::Executor::SharedPtr executor_;
+        rclcpp::CallbackGroup::SharedPtr cbg_service_ = std::make_shared<rclcpp::CallbackGroup>(rclcpp::CallbackGroupType::MutuallyExclusive);
+        rclcpp::CallbackGroup::SharedPtr cbg_subscriber_ = std::make_shared<rclcpp::CallbackGroup>(rclcpp::CallbackGroupType::MutuallyExclusive);
+
+        std::ofstream log_file_;
 
         void send2UDP(const std::shared_ptr<ros2_unitree_legged_msgs::srv::PosCmd::Request> req,
           std::shared_ptr<ros2_unitree_legged_msgs::srv::PosCmd::Response> res);

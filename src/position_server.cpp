@@ -4,7 +4,10 @@
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<PositionCommand>("position_cmd_srv"));
+    auto executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
+    //rclcpp::spin(std::make_shared<PositionCommand>("position_cmd_srv"));
+    auto node = std::make_shared<PositionCommand>("position_cmd_srv", executor);
+    node->run();
     rclcpp::shutdown();
 
     // auto node = rclcpp::Node::make_shared("position_cmd_srv");
