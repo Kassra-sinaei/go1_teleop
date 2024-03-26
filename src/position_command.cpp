@@ -73,7 +73,7 @@ void PositionCommand::send2UDP(const std::shared_ptr<ros2_unitree_legged_msgs::s
 
     double time = 0;
     //chrono::milliseconds max_iter = chrono::milliseconds(2);	
-    while(time < 2 * 50)    // modify this duration
+    while(time < 4 * 50)    // modify this duration
     {
         time+=1;
         // this->pidController(vel, set, this->current_pos_);

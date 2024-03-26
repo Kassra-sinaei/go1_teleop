@@ -17,7 +17,6 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(ros2_unitree_legged_msgs REQUIRED)
-find_package(teleop)
 
 
 if(BUILD_TESTING)
