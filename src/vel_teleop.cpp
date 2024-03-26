@@ -3,7 +3,9 @@
 VelTeleop::VelTeleop() : Node("vel_teleop")
 {
     high_cmd_pub_ = this->create_publisher<ros2_unitree_legged_msgs::msg::HighCmd>("/high_cmd", 1);
+    imu_pub_ = this->create_publisher<sensor_msgs::msg::Imu>("/imu_raw", 1);
     joy_sub_ = this->create_subscription<sensor_msgs::msg::Joy>("/joy", 10, std::bind(&VelTeleop::joyCallback, this, std::placeholders::_1));
+    state_sub_ = this->create_subscription<ros2_unitree_legged_msgs::msg::HighState>("/high_state", 10, std::bind(&VelTeleop::stateCallback, this, std::placeholders::_1));
 
     mode_ = 0;          // Default mode is idle
     gait_type_ = 1;     // Default gait type is trot walk
@@ -71,4 +73,23 @@ void VelTeleop::joyCallback(const sensor_msgs::msg::Joy::SharedPtr msg)
     high_cmd_ros.gait_type = gait_type_;
     high_cmd_ros.reserve = 0;
     high_cmd_pub_->publish(high_cmd_ros);
+}
+
+void VelTeleop::stateCallback(const ros2_unitree_legged_msgs::msg::HighState::SharedPtr msg)
+{
+    sensor_msgs::msg::Imu imu_msg;
+    imu_msg.orientation.x = msg->imu.quaternion[0];
+    imu_msg.orientation.y = msg->imu.quaternion[1];
+    imu_msg.orientation.z = msg->imu.quaternion[2];
+    imu_msg.orientation.w = msg->imu.quaternion[3];
+
+    imu_msg.angular_velocity.x = msg->imu.gyroscope[0];
+    imu_msg.angular_velocity.y = msg->imu.gyroscope[1];
+    imu_msg.angular_velocity.z = msg->imu.gyroscope[2];
+
+    imu_msg.linear_acceleration.x = msg->imu.accelerometer[0];
+    imu_msg.linear_acceleration.y = msg->imu.accelerometer[1];
+    imu_msg.linear_acceleration.z = msg->imu.accelerometer[2];
+
+    imu_pub_->publish(imu_msg);
 }
