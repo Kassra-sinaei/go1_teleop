@@ -78,6 +78,8 @@ void VelTeleop::joyCallback(const sensor_msgs::msg::Joy::SharedPtr msg)
 void VelTeleop::stateCallback(const ros2_unitree_legged_msgs::msg::HighState::SharedPtr msg)
 {
     sensor_msgs::msg::Imu imu_msg;
+    imu_msg.header.stamp = this->get_clock()->now();
+
     imu_msg.orientation.x = msg->imu.quaternion[0];
     imu_msg.orientation.y = msg->imu.quaternion[1];
     imu_msg.orientation.z = msg->imu.quaternion[2];
@@ -91,5 +93,6 @@ void VelTeleop::stateCallback(const ros2_unitree_legged_msgs::msg::HighState::Sh
     imu_msg.linear_acceleration.y = msg->imu.accelerometer[1];
     imu_msg.linear_acceleration.z = msg->imu.accelerometer[2];
 
+    imu_msg.header.frame_id = "base_link";
     imu_pub_->publish(imu_msg);
 }
