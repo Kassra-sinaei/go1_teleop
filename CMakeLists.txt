@@ -17,6 +17,8 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(ros2_unitree_legged_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(teleop_twist_joy REQUIRED)
 
 
 if(BUILD_TESTING)
@@ -48,14 +50,20 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 
 set(SOURCES
   src/position_command.cpp
+  src/vel_teleop.cpp
 )
 # Executables
 add_executable(position_server src/position_server.cpp ${SOURCES})
 target_link_libraries(position_server ${EXTRA_LIBS})
 ament_target_dependencies(position_server rclcpp ros2_unitree_legged_msgs)
 
+add_executable(joy_stick_teleop src/joy_controller.cpp ${SOURCES})
+target_link_libraries(joy_stick_teleop ${EXTRA_LIBS})
+ament_target_dependencies(joy_stick_teleop rclcpp ros2_unitree_legged_msgs sensor_msgs teleop_twist_joy)
+
 install(TARGETS
     position_server
+    joy_stick_teleop
     DESTINATION lib/${PROJECT_NAME}
 )
 
