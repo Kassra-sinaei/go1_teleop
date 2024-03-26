@@ -18,7 +18,6 @@ find_package(rclcpp REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(ros2_unitree_legged_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(teleop_twist_joy REQUIRED)
 
 
 if(BUILD_TESTING)
@@ -39,6 +38,7 @@ include_directories(
     include
     include/${PROJECT_NAME}
     ${CMAKE_SOURCE_DIR}/unitree_legged_sdk/include
+    ${sensor_msgs_INCLUDE_DIRS}
 )
 
 link_directories(${CMAKE_SOURCE_DIR}/unitree_legged_sdk/lib)
@@ -48,18 +48,14 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/PosCmd.srv"
  )
 
-set(SOURCES
-  src/position_command.cpp
-  src/vel_teleop.cpp
-)
 # Executables
-add_executable(position_server src/position_server.cpp ${SOURCES})
+add_executable(position_server src/position_server.cpp src/position_command.cpp)
 target_link_libraries(position_server ${EXTRA_LIBS})
 ament_target_dependencies(position_server rclcpp ros2_unitree_legged_msgs)
 
-add_executable(joy_stick_teleop src/joy_controller.cpp ${SOURCES})
+add_executable(joy_stick_teleop src/joy_controller.cpp src/vel_teleop.cpp)
 target_link_libraries(joy_stick_teleop ${EXTRA_LIBS})
-ament_target_dependencies(joy_stick_teleop rclcpp ros2_unitree_legged_msgs sensor_msgs teleop_twist_joy)
+ament_target_dependencies(joy_stick_teleop rclcpp ros2_unitree_legged_msgs sensor_msgs)
 
 install(TARGETS
     position_server
