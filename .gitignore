@@ -1,2 +1,7 @@
 *.csv
 __pycache__
+unitree_legged_sdk/build
+
+*.o
+.vscode
+.clang-format

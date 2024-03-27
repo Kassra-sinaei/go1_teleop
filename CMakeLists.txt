@@ -32,7 +32,12 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-set(EXTRA_LIBS -pthread libunitree_legged_sdk_${ARCH}.so lcm)
+set(EXTRA_LIBS -pthread libunitree_legged_sdk.a)
+
+# Add built Boost version 1.71
+set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/unitree_legged_sdk/boost_1_71_0")
+set(Boost_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/unitree_legged_sdk/boost_1_71_0")
+include_directories(${Boost_INCLUDE_DIRS}) 
 
 include_directories(
     include
@@ -41,7 +46,7 @@ include_directories(
     ${sensor_msgs_INCLUDE_DIRS}
 )
 
-link_directories(${CMAKE_SOURCE_DIR}/unitree_legged_sdk/lib)
+link_directories(${CMAKE_SOURCE_DIR}/unitree_legged_sdk/lib/cpp/${ARCH})
 
 # Service and Message files
 rosidl_generate_interfaces(${PROJECT_NAME}
@@ -70,5 +75,10 @@ install(
 
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME})
+
+  install(
+    DIRECTORY ${CMAKE_SOURCE_DIR}/unitree_legged_sdk/lib/
+    DESTINATION lib
+)
 
 ament_package()
