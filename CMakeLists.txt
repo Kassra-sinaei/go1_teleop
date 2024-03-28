@@ -35,18 +35,18 @@ endif()
 set(EXTRA_LIBS -pthread libunitree_legged_sdk.a)
 
 # Add built Boost version 1.71
-set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/unitree_legged_sdk/boost_1_71_0")
-set(Boost_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/unitree_legged_sdk/boost_1_71_0")
+set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/../unitree_ros2_to_real/unitree_legged_sdk/boost_1_71_0")
+set(Boost_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/../unitree_ros2_to_real/unitree_legged_sdk/boost_1_71_0")
 include_directories(${Boost_INCLUDE_DIRS}) 
 
 include_directories(
     include
     include/${PROJECT_NAME}
-    ${CMAKE_SOURCE_DIR}/unitree_legged_sdk/include
+    ${CMAKE_SOURCE_DIR}/../unitree_ros2_to_real/unitree_legged_sdk/include
     ${sensor_msgs_INCLUDE_DIRS}
 )
 
-link_directories(${CMAKE_SOURCE_DIR}/unitree_legged_sdk/lib/cpp/${ARCH})
+link_directories(${CMAKE_SOURCE_DIR}/../unitree_ros2_to_real/unitree_legged_sdk/lib/cpp/${ARCH})
 
 # Service and Message files
 rosidl_generate_interfaces(${PROJECT_NAME}
@@ -69,7 +69,7 @@ install(TARGETS
 )
 
 install(
-    DIRECTORY ${CMAKE_SOURCE_DIR}/unitree_legged_sdk/lib/
+    DIRECTORY ${CMAKE_SOURCE_DIR}/../unitree_ros2_to_real/unitree_legged_sdk/lib/
     DESTINATION lib
 )
 
@@ -77,7 +77,7 @@ install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME})
 
   install(
-    DIRECTORY ${CMAKE_SOURCE_DIR}/unitree_legged_sdk/lib/
+    DIRECTORY ${CMAKE_SOURCE_DIR}/../unitree_ros2_to_real/unitree_legged_sdk/lib/
     DESTINATION lib
 )
 
