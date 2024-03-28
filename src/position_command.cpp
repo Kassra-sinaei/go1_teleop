@@ -7,7 +7,7 @@ PositionCommand::PositionCommand(std::string passedNodeName, const rclcpp::Execu
     cbg_service_ = this->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
     cbg_subscriber_ = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
     // Create Position Command Server
-    srv_ = this->create_service<ros2_unitree_legged_msgs::srv::PosCmd>("/pos_cmd", 
+    srv_ = this->create_service<teleop::srv::PosCmd>("/pos_cmd", 
             std::bind(&PositionCommand::send2UDP, this, std::placeholders::_1, std::placeholders::_2 ),
             rmw_qos_profile_services_default, cbg_service_);
     // Initialize UDP Publisher
@@ -51,8 +51,8 @@ void PositionCommand::updatePos(const ros2_unitree_legged_msgs::msg::HighState::
     //cout << "High State Updated" << endl;
 }
 
-void PositionCommand::send2UDP(const std::shared_ptr<ros2_unitree_legged_msgs::srv::PosCmd::Request> req,
-          std::shared_ptr<ros2_unitree_legged_msgs::srv::PosCmd::Response> res){
+void PositionCommand::send2UDP(const std::shared_ptr<teleop::srv::PosCmd::Request> req,
+          std::shared_ptr<teleop::srv::PosCmd::Response> res){
     Eigen::Vector3d vel;
     Eigen::Vector3d set(req->x, req->y, current_pos_(2));
     // check here for reference: https://qiita.com/coder-penguin/items/63f1fc1da8958f46dadd

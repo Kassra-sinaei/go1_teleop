@@ -14,7 +14,7 @@
 #include "ros2_unitree_legged_msgs/msg/high_state.hpp"
 #include "unitree_legged_sdk/unitree_legged_sdk.h"
 
-#include "ros2_unitree_legged_msgs/srv/pos_cmd.hpp"
+#include "teleop/srv/pos_cmd.hpp"
 
 using namespace std;
 
@@ -33,7 +33,7 @@ class PositionCommand : public rclcpp::Node{
         Eigen::Vector3d high_bound_;
         Eigen::Vector3d error_i_;
         Eigen::Vector3d error_p_;
-        rclcpp::Service<ros2_unitree_legged_msgs::srv::PosCmd>::SharedPtr srv_;
+        rclcpp::Service<teleop::srv::PosCmd>::SharedPtr srv_;
         rclcpp::Publisher<ros2_unitree_legged_msgs::msg::HighCmd>::SharedPtr pos_msg_;
         rclcpp::Subscription<ros2_unitree_legged_msgs::msg::HighState>::SharedPtr pos_estimate_;
         
@@ -44,8 +44,8 @@ class PositionCommand : public rclcpp::Node{
 
         std::ofstream log_file_;
 
-        void send2UDP(const std::shared_ptr<ros2_unitree_legged_msgs::srv::PosCmd::Request> req,
-          std::shared_ptr<ros2_unitree_legged_msgs::srv::PosCmd::Response> res);
+        void send2UDP(const std::shared_ptr<teleop::srv::PosCmd::Request> req,
+          std::shared_ptr<teleop::srv::PosCmd::Response> res);
         void updatePos(const ros2_unitree_legged_msgs::msg::HighState::SharedPtr msg);
         void pidController(Eigen::Vector3d &res, Eigen::Vector3d set_point, Eigen::Vector3d current_state, 
                             double kp=0.5, double kd = 0, double ki = 0);
