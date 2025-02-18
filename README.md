@@ -54,7 +54,11 @@ then call in the terminal or from a client:
 ros2 service call /pos_cmd ros2_unitree_legged_msgs/srv/PosCmd "{x: 0.0, y: 0.0, phi: 0.0}"
 ```
 ## LLM Assistant
-Using this node you can operate the HighLevel controller of the robot with basic command line chat. Note that you will need an active API key from [OpenAI](https://platform.openai.com/account/api-keys). Start the chat with:
+Using this node you can operate the HighLevel controller of the robot with basic command line chat. Note that you will need an active API key from [OpenAI](https://platform.openai.com/account/api-keys). Launch the controller:
+```bash
+ros2 launch position_command.py 
+```
+Then start the chat with:
 ```bash
 ./src/teleop/scripts/go1_rosa.py
 ```

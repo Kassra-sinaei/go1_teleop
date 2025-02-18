@@ -44,9 +44,16 @@ class Go1MotionClient(ROSA):
             description="Sit down the robot in resting posture.",
             func=self.sit
         )
+
+        dance = Tool(
+            name="dance",
+            description="Make the robot do a simple dance.",
+            func=self.dance
+        )
+
         super().__init__(
             ros_version=2, llm=self.__llm, 
-            tools=[move_forward, stand_up, sit_down], 
+            tools=[move_forward, stand_up, sit_down, dance], 
             prompts=self.__prompts, streaming=self.__streaming, blacklist=self.__blacklist, verbose=True, accumulate_chat_history=True)
         
         ## ROS2 Node Setup
@@ -109,7 +116,7 @@ class Go1MotionClient(ROSA):
         self.high_cmd_pub_.publish(msg)
         return "Standing Down"
     
-    def dance(self) -> str:
+    def dance(self, input=None) -> str:
         """
         Make the robot do a simple dance.
         """
