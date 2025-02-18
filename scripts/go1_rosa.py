@@ -6,7 +6,7 @@ from langchain_openai import ChatOpenAI
 import os
 
 from rclpy import spin_until_future_complete
-from ros2_unitree_legged_msgs.srv import PosCmd
+from teleop.srv import PosCmd
 import rclpy
 from ros2_unitree_legged_msgs.msg import HighCmd
 
@@ -56,7 +56,6 @@ class Go1MotionClient(ROSA):
         while not self.cli_.wait_for_service(timeout_sec=1.0):
             self.node_.get_logger().info('service not available, waiting again...')
         self.req_ = PosCmd.Request()
-        self.send_request(x=0, y=0, phi=0)
 
 
     def send_request(self, x: float = 0, y: float = 0, phi: float = 0):

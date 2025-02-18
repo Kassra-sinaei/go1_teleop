@@ -1,5 +1,5 @@
-int64 x
-int64 y
-int64 phi
+float32 x
+float32 y
+float32 phi
 ---
 bool res
