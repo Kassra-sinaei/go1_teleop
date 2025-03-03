@@ -10,18 +10,30 @@ This package includes the following:
 ## Build
 The services required for this package are inside the srv file and we want to make them here. First navigate to CMakeLists.txt and comment lines 21, 58, 59, 60, 61, 62, 63, 64, 67, 68. Then build the package once to generate service file.
 ``` bash
-colcon build --packages-select teleop
+$ colcon build --packages-select teleop
 ```
 When finished uncoment all the lines commented earlier and build using the same terminal command to build nodes.
 
+## Vicon Setup
+The posiiton controller depends on the vicon_receiver package (see [link](https://github.com/OPT4SMART/ros2-vicon-receiver) formore details on build instruciton). 
+
+The vicon streaming sdk should be installed prior to building the vicon receiver package:
+```bash
+$ ./install_libs.sh
+$ cd vicon_ws
+$ colcon build --symlink-install
+```
+Head in to the Vicon Tracker Software and set up the UDP broadcasting for objects (unitree go1 robot) following th instructions given in this [section](https://help.vicon.com/download/attachments/13930079/Vicon%20Tracker%20User%20Guide.pdf#page=38.18) Tracker user manual. 
+
+⚠️ Make sure the IP address and the port are set correctly.
 ## Xbox controller
 
 When connected to rhe robot via udp, we can no longer control it using the Unitree Joystick. Instead we can use the SDK and ROS package to move the robot while sending/receiving data from UDP.
 
 ``` bash
-colcon build
-cd src/teleop/launch
-ros2 launch teleop_launch.py 
+$ colcon build
+$ cd src/teleop/launch
+$ ros2 launch teleop_launch.py 
 ```
 
 This launch file starts ros2_udp server from unitree_legged_real package, and teleop_twist_joy node.

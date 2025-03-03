@@ -3,6 +3,7 @@
 from langchain.agents import tool, Tool
 from rosa import ROSA, RobotSystemPrompts
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 import os
 
 from rclpy import spin_until_future_complete
@@ -20,11 +21,18 @@ class Go1MotionClient(ROSA):
         self.__prompts = RobotSystemPrompts(
         embodiment_and_persona="You are a ros2 service caller to move a unitree go1 robot.",
         about_your_operators="Your operators are robotics engineer who want to experiment with go1 robot.",
-        critical_instructions="You should always inform the operator of the result of service calls.",
+        critical_instructions="You should always inform the operator of the result of service calls."
+        "Make sure the robot is standing up before sending motion commands.",
         about_your_environment="The robot is inside a univerity lab on a flat ground.",
         about_your_capabilities="You can call services to move the robot inside lab and does a few simple dances."
         )
-        self.__llm = ChatOpenAI(model="gpt-3.5-turbo", api_key=os.environ.get('OPENAI_API_KEY'))
+        # self.__llm = ChatOpenAI(model="gpt-3.5-turbo", api_key=os.environ.get('OPENAI_API_KEY'))
+        # self.__llm = ChatOllama(model="phi3.5:latest")
+        self.__llm =ChatOllama(
+            model="llama3:8b",  # or your preferred model
+            temperature=0,
+            num_ctx=8192,  # adjust based on your model's context window
+        )
         self.__streaming = streaming
         # Tools for agent
         move_forward = Tool(
