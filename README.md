@@ -25,7 +25,12 @@ $ colcon build --symlink-install
 ```
 Head in to the Vicon Tracker Software and set up the UDP broadcasting for objects (unitree go1 robot) following th instructions given in this [section](https://help.vicon.com/download/attachments/13930079/Vicon%20Tracker%20User%20Guide.pdf#page=38.18) Tracker user manual. 
 
-⚠️ Make sure the IP address and the port are set correctly.
+⚠️ Make sure the IP address and the port are set correctly. Open Tracker app then select Local Vicon SYstem in the SYSTEM tab and then press show advanced. Scroll down to UDP Stream and check enable, then adjust the ip address to 192.168.0.106.
+<p align="center">
+    <img src="tracker_ss.png" alt="Vicon Setup">
+</p>
+
+Check the ros2 topic list in the machine (should be connected to the lab wifi) and look for topics with /vicon name space.
 ## Xbox controller
 
 When connected to rhe robot via udp, we can no longer control it using the Unitree Joystick. Instead we can use the SDK and ROS package to move the robot while sending/receiving data from UDP.
